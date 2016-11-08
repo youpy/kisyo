@@ -1,6 +1,6 @@
 # Kisyo
 
-TODO: Write a gem description
+A ruby tool for getting weather information from www.data.jma.go.jp
 
 ## Installation
 
@@ -20,11 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+see https://github.com/youpy/kisyo/tree/master/spec/kisyo/daily_spec.rb
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/kisyo/fork )
+1. Fork it ( https://github.com/youpy/kisyo/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
