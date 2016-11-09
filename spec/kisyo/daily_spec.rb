@@ -19,11 +19,15 @@ describe Kisyo::Daily do
       'http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?block_no=47662&day=01&month=11&prec_no=44&view=p1&year=2016'
     }
 
+    before do
+      stub_request(:get, url).
+        to_return(:body => read_fixture_file(fixture_file_name))
+    end
+
     context 'information is available' do
-      before do
-        stub_request(:get, url).
-          to_return(:body => read_fixture_file('201611.html'))
-      end
+      let(:fixture_file_name) {
+        '201611.html'
+      }
 
       it 'returns weather information for given day' do
         info = daily.at(date)
@@ -44,10 +48,9 @@ describe Kisyo::Daily do
     end
 
     context 'information is not available' do
-      before do
-        stub_request(:get, url).
-          to_return(:body => read_fixture_file('ng.html'))
-      end
+      let(:fixture_file_name) {
+        'ng.html'
+      }
 
       it 'raises error' do
         expect {
