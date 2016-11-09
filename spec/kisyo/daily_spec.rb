@@ -55,7 +55,7 @@ describe Kisyo::Daily do
       it 'raises error' do
         expect {
           daily.at(date)
-        }.to raise_error(Kisyo::Error, 'invalid date')
+        }.to raise_error(Kisyo::WeatherInformationNotAvailable)
       end
     end
   end

@@ -19,7 +19,7 @@ module Kisyo
       doc = Nokogiri::HTML(content)
       days = doc.css('div.a_print')
 
-      raise Error.new('invalid date') if days.size == 0
+      raise WeatherInformationNotAvailable if days.size == 0
 
       days.each do |el|
         if el.text.to_i == date.day
