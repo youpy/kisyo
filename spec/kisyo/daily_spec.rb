@@ -19,22 +19,21 @@ describe Kisyo::Daily do
       'http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?block_no=47662&day=01&month=11&prec_no=44&view=p1&year=2016'
     }
 
+    let(:fixture_file_name) {
+      '201611.html'
+    }
+
     before do
       stub_request(:get, url).
         to_return(:body => read_fixture_file(fixture_file_name))
     end
 
     context 'information is available' do
-      let(:fixture_file_name) {
-        '201611.html'
-      }
-
       it 'returns weather information for given day' do
         info = daily.at(date)
 
         expect(info.precipitation_total).to eql(1.5)
         expect(info.precipitation_hourly_max).to eql(1.0)
-        expect(info.precipitation_10min_max).to eql(0.5)
         expect(info.precipitation_10min_max).to eql(0.5)
         expect(info.temperature_avg).to eql(10.9)
         expect(info.temperature_max).to eql(12.2)
@@ -56,6 +55,20 @@ describe Kisyo::Daily do
         expect {
           daily.at(date)
         }.to raise_error(Kisyo::WeatherInformationNotAvailable)
+      end
+    end
+
+    context 'value is "--"' do
+      let(:date) {
+        Date.parse('2016-11-04')
+      }
+
+      it '"--" is converted to nil' do
+        info = daily.at(date)
+
+        expect(info.precipitation_total).to be_nil
+        expect(info.precipitation_hourly_max).to be_nil
+        expect(info.precipitation_10min_max).to be_nil
       end
     end
   end

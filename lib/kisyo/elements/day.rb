@@ -31,17 +31,26 @@ module Kisyo
             general_weather_condition_day,
             general_weather_condition_night
           )
-        @precipitation_total = precipitation_total.to_f
-        @precipitation_hourly_max = precipitation_hourly_max.to_f
-        @precipitation_10min_max = precipitation_10min_max.to_f
-        @temperature_avg = temperature_avg.to_f
-        @temperature_max = temperature_max.to_f
-        @temperature_min = temperature_min.to_f
-        @humidity_avg = humidity_avg.to_f
-        @humidity_min = humidity_min.to_f
-        @day_length = day_length.to_f
+        @precipitation_total = convert_value(precipitation_total)
+        @precipitation_hourly_max = convert_value(precipitation_hourly_max)
+        @precipitation_10min_max = convert_value(precipitation_10min_max)
+        @temperature_avg = convert_value(temperature_avg)
+        @temperature_max = convert_value(temperature_max)
+        @temperature_min = convert_value(temperature_min)
+        @humidity_avg = convert_value(humidity_avg)
+        @humidity_min = convert_value(humidity_min)
+        @day_length = convert_value(day_length)
         @general_weather_condition_day = general_weather_condition_day
         @general_weather_condition_night = general_weather_condition_night
+      end
+
+      def convert_value(value)
+        case value
+        when '--'
+          nil
+        else
+          value.to_f
+        end
       end
     end
   end
