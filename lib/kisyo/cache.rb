@@ -5,6 +5,7 @@ module Kisyo
     def initialize
       @keys = []
       @values = {}
+      @m = Mutex.new
     end
 
     def get(key)
@@ -12,17 +13,19 @@ module Kisyo
     end
 
     def set(key, value)
-      keys << key
-      values[key] = value
+      m.synchronize do
+        keys << key
+        values[key] = value
 
-      if keys.size > CACHE_SIZE
-        oldest_key = keys.shift
-        values.delete(oldest_key)
+        if keys.size > CACHE_SIZE
+          oldest_key = keys.shift
+          values.delete(oldest_key)
+        end
       end
     end
 
     private
 
-    attr_reader :keys, :values
+    attr_reader :keys, :values, :m
   end
 end
