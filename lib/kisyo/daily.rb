@@ -24,9 +24,7 @@ module Kisyo
       days.each do |el|
         if el.text.to_i == date.day
           tr = el.parent.parent
-          values = tr.css('td').map do |td|
-            td.text
-          end
+          values = tr.css('td').map(&:text)
 
           return Element::Day.new(*values[1 .. -1])
         end
