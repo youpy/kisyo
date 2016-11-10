@@ -14,6 +14,10 @@ module Kisyo
 
     def set(key, value)
       m.synchronize do
+        if values[key]
+          return
+        end
+
         keys << key
         values[key] = value
 
