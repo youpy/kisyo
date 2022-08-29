@@ -1,8 +1,13 @@
 require 'csv'
+require 'geocoder'
 
 module Kisyo
   class Location
     attr_reader :prefecture_id, :block_id
+
+    def self.distance(lat1, lng1, lat2, lng2)
+      Geocoder::Calculations.distance_between([lat1, lng1], [lat2, lng2])
+    end
 
     def self.dms_to_degrees(d, m, s = 0)
       d + m / 60.0 + s / 3600.0
@@ -15,11 +20,10 @@ module Kisyo
             la = dms_to_degrees(row[5].to_f, row[6].to_f)
             ln = dms_to_degrees(row[7].to_f, row[8].to_f)
 
-            [Math.sqrt((lat - la)**2 + (lng - ln)**2), row]
+            [distance(lat, lng, la, ln), row]
           end
 
-        distance = distances.min_by { |(dist, _)| dist }
-        row = distance[1]
+        row = distances.min_by { |(dist, _)| dist }[1]
 
         new(row[3], row[4])
       end
