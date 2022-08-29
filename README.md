@@ -20,7 +20,14 @@ Or install it yourself as:
 
 ## Usage
 
-see https://github.com/youpy/kisyo/tree/master/spec/kisyo/daily_spec.rb
+```ruby
+require 'kisyo'
+
+location = Kisyo::location.nearest(35.6809591, 139.7673068)
+daily = Kisyo::Daily.new(location)
+date = Date.parse('2016-11-02')
+daily.at(date)
+```
 
 ## Contributing
 
