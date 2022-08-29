@@ -2,31 +2,22 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Kisyo::Daily do
-  let(:date) {
-    Date.parse('2016-11-02')
-  }
-
-  let(:location) {
-    Kisyo::Location.new(44, 47662)
-  }
-
-  let(:daily) {
-    Kisyo::Daily.new(location)
-  }
+  let(:date) { Date.parse('2016-11-02') }
+  let(:location) { Kisyo::Location.new('44', '47662') }
+  let(:daily) { Kisyo::Daily.new(location) }
 
   describe '#at' do
-    let(:url) {
+    let(:url) do
       'http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?block_no=47662&day=01&month=11&prec_no=44&view=p1&year=2016'
-    }
+    end
 
-    let(:fixture_file_name) {
-      '201611.html'
-    }
+    let(:fixture_file_name) { '201611.html' }
 
     context 'single request' do
       before do
-        stub_request(:get, url).
-          to_return(:body => read_fixture_file(fixture_file_name))
+        stub_request(:get, url).to_return(
+          body: read_fixture_file(fixture_file_name)
+        )
       end
 
       context 'information is available' do
@@ -48,21 +39,17 @@ describe Kisyo::Daily do
       end
 
       context 'information is not available' do
-        let(:fixture_file_name) {
-          'ng.html'
-        }
+        let(:fixture_file_name) { 'ng.html' }
 
         it 'raises error' do
-          expect {
-            daily.at(date)
-          }.to raise_error(Kisyo::WeatherInformationNotAvailable)
+          expect { daily.at(date) }.to raise_error(
+            Kisyo::WeatherInformationNotAvailable
+          )
         end
       end
 
       context 'value is "--"' do
-        let(:date) {
-          Date.parse('2016-11-04')
-        }
+        let(:date) { Date.parse('2016-11-04') }
 
         it '"--" is converted to nil' do
           info = daily.at(date)
@@ -75,9 +62,9 @@ describe Kisyo::Daily do
     end
     context 'multiple request' do
       before do
-        stub_request(:get, url).
-          to_return(:body => read_fixture_file(fixture_file_name)).
-          times(number_of_request)
+        stub_request(:get, url)
+          .to_return(body: read_fixture_file(fixture_file_name))
+          .times(number_of_request)
       end
 
       context '2016-11-01 - 2016-11-05' do

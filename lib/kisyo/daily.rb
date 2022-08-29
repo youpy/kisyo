@@ -17,15 +17,16 @@ module Kisyo
         return value
       end
 
-      url = 'http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?prec_no=%i&block_no=%i&year=%i&month=%i&day=01&view=p1' % [
-        location.prefecture_id,
-        location.block_id,
-        date.year,
-        date.month
-      ]
+      url =
+        'http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?prec_no=%s&block_no=%s&year=%i&month=%i&day=01&view=p1' % [
+          location.prefecture_id,
+          location.block_id,
+          date.year,
+          date.month
+        ]
 
-      content = open(url).read
-      doc = Nokogiri::HTML(content)
+      content = URI.open(url).read
+      doc = Nokogiri.HTML(content)
       days = doc.css('div.a_print')
 
       raise WeatherInformationNotAvailable if days.size == 0
@@ -35,7 +36,7 @@ module Kisyo
         values = tr.css('td').map(&:text)
 
         k = [date.year, date.month, values[0]].join(',')
-        cache.set(k, Element::Day.new(*values[1 .. -1]))
+        cache.set(k, Element::Day.new(*values[1..-1]))
       end
 
       cache.get(key)
