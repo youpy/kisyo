@@ -14,19 +14,17 @@ module Kisyo
     end
 
     def self.nearest(lat, lng)
-      CSV.open(File.dirname(__FILE__) + '/../blocks.csv') do |csv|
-        distances =
-          csv.map do |row|
-            la = dms_to_degrees(row[5].to_f, row[6].to_f)
-            ln = dms_to_degrees(row[7].to_f, row[8].to_f)
+      distances =
+        BLOCKS.map do |block|
+          la = dms_to_degrees(block[3].to_f, block[4].to_f)
+          ln = dms_to_degrees(block[5].to_f, block[6].to_f)
 
-            [distance(lat, lng, la, ln), row]
-          end
+          [distance(lat, lng, la, ln), block]
+        end
 
-        row = distances.min_by { |(dist, _)| dist }[1]
+      block = distances.min_by { |(dist, _)| dist }[1]
 
-        new(row[3], row[4])
-      end
+      new(block[1], block[2])
     end
 
     def initialize(prefecture_id, block_id)
